@@ -1,0 +1,3 @@
+[submodule "yukino-sdk/src/main/cpp/libmobi"]
+	path = yukino-sdk/src/main/cpp/libmobi
+	url = https://github.com/bfabiszewski/libmobi
