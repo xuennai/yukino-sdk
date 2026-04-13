@@ -1,0 +1,68 @@
+name: Build and Release AAR
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0 # 获取完整历史以防 JitPack 缓存识别问题
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Update PDFium and Build
+        run: |
+          chmod +x gradlew
+          # 先运行脚本下载二进制，然后执行 publish 任务
+          # 这样可以确保 Maven 属性被正确处理
+          python update_pdfium.py
+          ./gradlew :yukino-sdk:assembleRelease
+
+      - name: Rename AAR for Release
+        run: |
+          ORIGINAL_AAR="yukino-sdk/build/outputs/aar/yukino-sdk-release.aar"
+          NEW_AAR_NAME="yukino-sdk-${{ github.ref_name }}.aar"
+          cp "$ORIGINAL_AAR" "./$NEW_AAR_NAME"
+          echo "RELEASE_AAR_PATH=./$NEW_AAR_NAME" >> $GITHUB_ENV
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ env.RELEASE_AAR_PATH }}
+          name: Yukino SDK ${{ github.ref_name }}
+          body: |
+            ## 🚀 Yukino SDK Release
+            
+            **本次更新包含：**
+            - 🔄 核心库已统一为 `yukino-sdk`
+            - 📚 集成 `libmobi` 解析引擎 (Submodule)
+            - 📄 PDFium 二进制已同步至最新版
+            
+            **Maven 坐标:**
+            `com.github.xuennai:yukino-sdk:${{ github.ref_name }}`
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

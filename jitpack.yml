@@ -1,0 +1,10 @@
+# jitpack.yml
+jdk:
+  - openjdk21
+
+before_install:
+  - git submodule update --init --recursive
+  - chmod +x gradlew
+
+install:
+  - ./gradlew :yukino-sdk:publishToMavenLocal -Pgroup=com.github.xuennai -Pversion=${Tag#v}
