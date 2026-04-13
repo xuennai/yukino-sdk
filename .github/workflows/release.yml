@@ -17,26 +17,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          fetch-depth: 0 # 获取完整历史以防 JitPack 缓存识别问题
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'temurin'
+          distribution: 'murine'
           cache: 'gradle'
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
-      - name: Update PDFium and Build
+      - name: Build AAR
         run: |
           chmod +x gradlew
-          # 先运行脚本下载二进制，然后执行 publish 任务
-          # 这样可以确保 Maven 属性被正确处理
-          python update_pdfium.py
+          # 只保留核心编译任务
           ./gradlew :yukino-sdk:assembleRelease
 
       - name: Rename AAR for Release
@@ -58,7 +51,7 @@ jobs:
             **本次更新包含：**
             - 🔄 核心库已统一为 `yukino-sdk`
             - 📚 集成 `libmobi` 解析引擎 (Submodule)
-            - 📄 PDFium 二进制已同步至最新版
+            - ⚡ 移除 PDFium 依赖，切换至原生高性能 `PdfRenderer` (0MB 增量方案)
             
             **Maven 坐标:**
             `com.github.xuennai:yukino-sdk:${{ github.ref_name }}`

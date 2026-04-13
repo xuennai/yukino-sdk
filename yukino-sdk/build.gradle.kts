@@ -17,12 +17,6 @@ android {
         ndk {
             abiFilters.add("arm64-v8a")
         }
-
-        externalNativeBuild {
-            cmake {
-                cppFlags("")
-            }
-        }
     }
 
     externalNativeBuild {
@@ -41,18 +35,11 @@ android {
         jvmToolchain(21)
     }
 
-    sourceSets {
-        getByName("main") {
-            jniLibs.directories.add(file("src/main/jniLibs").toString())
-        }
-    }
-
     publishing {
         singleVariant("release")
     }
 }
 
-@Suppress("UnstableApiUsage")
 afterEvaluate {
     publishing {
         publications {
