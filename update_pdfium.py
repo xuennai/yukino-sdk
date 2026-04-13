@@ -9,7 +9,7 @@ import sys
 # ==========================================
 # 配置路径 (基于项目根目录)
 # ==========================================
-MODULE_NAME = "pdfium-sdk"
+MODULE_NAME = "yukino-sdk"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODULE_DIR = os.path.join(BASE_DIR, MODULE_NAME)
 
