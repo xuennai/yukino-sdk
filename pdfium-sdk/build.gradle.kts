@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library")
+    `maven-publish`
 }
 
 android {
@@ -43,6 +44,25 @@ android {
     sourceSets {
         getByName("main") {
             jniLibs.directories.add(file("src/main/jniLibs").toString())
+        }
+    }
+
+    publishing {
+        singleVariant("release")
+    }
+}
+
+@Suppress("UnstableApiUsage")
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "com.github.xuennai"
+                artifactId = "pdfium-sdk"
+                version = "v1.0.1"
+            }
         }
     }
 }
