@@ -25,6 +25,14 @@ find_library(android-lib android)
 set(MOBI_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/libmobi)
 set(MOBI_SRC_DIR ${MOBI_ROOT}/src)
 
+if(NOT EXISTS "${MOBI_SRC_DIR}/read.c")
+    message(FATAL_ERROR "
+    🚨 [Yukino 致命错误] 找不到 libmobi 源码！
+    路径: ${MOBI_SRC_DIR} 是空的！
+    请确保 CI 环境执行了: git submodule update --init --recursive
+    ")
+endif()
+
 include_directories(${MOBI_SRC_DIR})
 
 set(MOBI_SOURCES
