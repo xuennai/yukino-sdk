@@ -7,4 +7,4 @@ before_install:
   - chmod +x gradlew
 
 install:
-  - ./gradlew :yukino-sdk:publishToMavenLocal -Pgroup=com.github.xuennai -Pversion=$Tag
+  - ./gradlew :yukino-sdk:publishToMavenLocal -Pgroup=com.github.xuennai -Pversion=${Tag#v}

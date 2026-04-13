@@ -58,10 +58,11 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
+                val rawVersion = System.getenv("VERSION") ?: project.version.toString()
 
                 groupId = "com.github.xuennai"
                 artifactId = "yukino-sdk"
-                version = System.getenv("VERSION") ?: project.version.toString()
+                version = rawVersion.removePrefix("v")
             }
         }
     }
