@@ -25,7 +25,7 @@ dependencyResolutionManagement {
 在模块级 build.gradle.kts 中添加：
 ```kotlin
 dependencies {
-  implementation("com.github.xuennai:yukino-sdk:v1.0.3")
+  implementation("com.github.xuennai:yukino-sdk:v1.0.4")
 }
 ```
 
